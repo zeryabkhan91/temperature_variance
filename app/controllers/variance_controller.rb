@@ -2,7 +2,8 @@ class VarianceController < ApplicationController
   before_action :authenticate_and_redirect!
 
   def index
-    data_sets = DataSet.where("recorded_at >= ?", DateTime.now - 1.minute)
+    date_time = params["date_time"].present? ? params["date_time"] : DateTime.now - 1.minute
+    data_sets = DataSet.where("recorded_at >= ?", date_time)
     if data_sets.present?
       @temps = data_sets.pluck(:temperature)
       render json: {message: "Variance of #{data_sets.count} DataSets over the last minute Reference", variance: variance}, status: 200
