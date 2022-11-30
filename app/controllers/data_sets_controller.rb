@@ -36,7 +36,12 @@ class DataSetsController < ApplicationController
 
   # DELETE /data_sets/1
   def destroy
-    @data_set.destroy
+    begin
+      @data_set.destroy
+      render json: "DataSet Removed!"
+    rescue => e
+      render json: {error: e.message}, status: 400
+    end
   end
 
   private
